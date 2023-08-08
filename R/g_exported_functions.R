@@ -51,6 +51,7 @@ chunk_reveal <- function(chunk_name = NULL,
                          platform = c("xaringan", "quarto"),
                          lcolw = "40",
                          rcolw = "60",
+                         smallcode = FALSE,
                          break_type = "auto",
                          left_assign = F,
                          left_assign_add = NULL,
@@ -84,6 +85,7 @@ chunk_reveal <- function(chunk_name = NULL,
 ){
 
   platform <- match.arg(platform)
+  smallcode <- smallcode
 
   correct_py(lang = lang)
 
@@ -146,6 +148,7 @@ chunk_reveal <- function(chunk_name = NULL,
                        platform = platform,
                        lcolw = lcolw,
                        rcolw = rcolw,
+                       smallcode = smallcode,
                        break_type = break_type,
                        num_breaks = num_breaks,
                        display_type = display_type,
@@ -169,7 +172,9 @@ chunk_reveal <- function(chunk_name = NULL,
 
 }
 
-# q version for quarto default
+
+
+
 chunq_reveal <- function(...) chunk_reveal(..., platform = "quarto")
 
 

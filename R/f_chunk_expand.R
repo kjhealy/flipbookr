@@ -10,6 +10,7 @@
 chunk_expand <- function(platform = c("xaringan", "quarto"),
                          lcolw = "60",
                          rcolw = "40",
+                         smallcode = FALSE,
                          chunk_name = "example",
                          break_type = "auto",
                          display_type = c("code", "output"),
@@ -44,13 +45,17 @@ chunk_expand <- function(platform = c("xaringan", "quarto"),
 
   if(platform == "quarto") {
 
+    colsize <- ifelse(smallcode == TRUE, " .smallcode ", "")
+
     left <- code
     right <- output
 
     partial_knit_steps <- glue::glue(
       " ",
-      glue::glue("## ", title, " {{.smaller}}"),
-      "::::: {.columns .smaller}",
+      #glue::glue("## ", title, " {{.smaller}}"),
+      glue::glue("## ", title, ""),
+      glue::glue(":::: {{.columns ", colsize, " }}"),
+      # "::::: {.columns .smaller}",
       glue::glue(":::: {{.column width='", lcolw, "%'}}"),
       left,
       "::::",
