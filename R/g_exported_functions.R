@@ -13,6 +13,9 @@ knit_text_and_collapse <- function(text){
 #' Upon compiling you get step-by-step code walk-through.
 #'
 #' @param chunk_name a character string referring to the name of the source chunk for the flipbooking
+#' @param platform a character string indicating the slide system. Either "xarignan" or "quarto". Defaults to "xaringan".
+#' @param lcolw a character string indicating the width of the left-side column. Quarto only. Defaults to "60". Converted to percent.
+#' @param rcolw a character string indicating the width of the right-side column. Quarto only. Defaults to "40". Converted to percent.
 #' @param break_type "auto" is default finding appropriate breakpoints, "user" can be used with the special comment message #BREAK within the source code chunk, "non_seq" can be used for non sequential display of code with special comment messages #BREAK2 (will show in second frame) and #BREAK3 (will show in third frame), an integer input can be given too, to simply display the source code chunk multiple times which is appropriate for observing multiple realizations of sampling, "rotate" allows cycling through different lines of code, the comment #ROTATE is used for lines to by cycled through
 #' @param left_assign a logical, default is FALSE, if TRUE will print the object created in the upper left hand corner of the source code chunk at the end of each partial reveal
 #' @param left_assign_add a character string containing function for table formatting in output, for left assign case only
@@ -45,37 +48,42 @@ knit_text_and_collapse <- function(text){
 #' @export
 #'
 chunk_reveal <- function(chunk_name = NULL,
-                   break_type = "auto",
-                   left_assign = F,
-                   left_assign_add = NULL,
-                   lang = "r",
-                   omit = "#OMIT",
-                   code_seq = NULL,
-                   code_seq_lag = NULL,
-                   code_seq_lag2 = NULL,
-                   code_seq_target = NULL,
-                   code_seq_start = NULL,
-                   func_seq = NULL,
-                   num_breaks = NULL,
-                   display_type = c("code", "output"),
-                   title = "",
-                   md = NULL,
-                   md2 = NULL,
-                   replacements = NULL,
-                   replace = NULL,
-                   replacements2 = replacements,
-                   replace2 = replace,
-                   replacements3 = replacements,
-                   replace3 = replace,
-                   widths = NULL,
-                   float = "left",
-                   chunk_options = "",
-                   color = c("black", "black", "black"),
-                   font_size_code = "80%"
-                   #,
-                   # out.width = "70%",
-                   # out.height = "70%"
-                   ){
+                         platform = c("xaringan", "quarto"),
+                         lcolw = "40",
+                         rcolw = "60",
+                         break_type = "auto",
+                         left_assign = F,
+                         left_assign_add = NULL,
+                         lang = "r",
+                         omit = "#OMIT",
+                         code_seq = NULL,
+                         code_seq_lag = NULL,
+                         code_seq_lag2 = NULL,
+                         code_seq_target = NULL,
+                         code_seq_start = NULL,
+                         func_seq = NULL,
+                         num_breaks = NULL,
+                         display_type = c("code", "output"),
+                         title = "",
+                         md = NULL,
+                         md2 = NULL,
+                         replacements = NULL,
+                         replace = NULL,
+                         replacements2 = replacements,
+                         replace2 = replace,
+                         replacements3 = replacements,
+                         replace3 = replace,
+                         widths = NULL,
+                         float = "left",
+                         chunk_options = "",
+                         color = c("black", "black", "black"),
+                         font_size_code = "80%"
+                         #,
+                         # out.width = "70%",
+                         # out.height = "70%"
+){
+
+  platform <- match.arg(platform)
 
   correct_py(lang = lang)
 
@@ -116,7 +124,7 @@ chunk_reveal <- function(chunk_name = NULL,
   try(code_seq_start <- code_seq_create_start(code_seq = code_seq))
 
   if (is.null(chunk_name)) {
-   #randomly generated chunk_name if there is none
+    #randomly generated chunk_name if there is none
     chunk_name <- sample(1:100000, 1)
   }
 
@@ -130,11 +138,14 @@ chunk_reveal <- function(chunk_name = NULL,
 
     num_breaks <- length(md)
 
-    }
+  }
 
   if(is.null(chunk_name)){chunk_name <- sample(1000:9999, 1)}
 
   text <- chunk_expand(chunk_name = chunk_name,
+                       platform = platform,
+                       lcolw = lcolw,
+                       rcolw = rcolw,
                        break_type = break_type,
                        num_breaks = num_breaks,
                        display_type = display_type,
@@ -151,13 +162,15 @@ chunk_reveal <- function(chunk_name = NULL,
                        #,
                        #out.height = out.height,
                        #out.width = out.width
-                       )
+  )
 
   # if (chunk_reveal)
   paste(knitr::knit(text = text, quiet = F), collapse = "\n")
 
 }
 
+# q version for quarto default
+chunq_reveal <- function(...) chunk_reveal(..., platform = "quarto")
 
 
 ## returning code sequence as a vector

@@ -7,7 +7,10 @@
 #   chunk_expand(lang = "python")
 
 ###### Create spawned code chunks ######
-chunk_expand <- function(chunk_name = "example",
+chunk_expand <- function(platform = c("xaringan", "quarto"),
+                         lcolw = "60",
+                         rcolw = "40",
+                         chunk_name = "example",
                          break_type = "auto",
                          display_type = c("code", "output"),
                          chunk_options = "fig.height = 12",
@@ -24,6 +27,8 @@ chunk_expand <- function(chunk_name = "example",
                          float = "left"
 ){
 
+  platform <- match.arg(platform)
+
   breaks <- 1:num_breaks
   breaks_prep <- stringr::str_pad(breaks, width = 2, pad = "0")
   code <- return_partial_chunks_template_code()
@@ -36,6 +41,32 @@ chunk_expand <- function(chunk_name = "example",
   try(func <- return_partial_chunks_template_function()) #because not worked out for python
   md <- "`r md[<<<breaks>>>]`"
   md2 <- "`r md2[<<<breaks>>>]`"
+
+  if(platform == "quarto") {
+
+    left <- code
+    right <- output
+
+    partial_knit_steps <- glue::glue(
+      " ",
+      glue::glue("## ", title, " {{.smaller}}"),
+      "::::: {.columns .smaller}",
+      glue::glue(":::: {{.column width='", lcolw, "%'}}"),
+      left,
+      "::::",
+      " ",
+      glue::glue(":::: {{.column width='", rcolw, "%'}}"),
+      right,
+      "::::",
+      ":::::",
+      " ",
+      .open = "<<<", .close = ">>>", .sep = "\n"
+    )
+
+    slide_code <- glue::glue_collapse(partial_knit_steps, sep = "\n\n")
+    return(glue::glue("{slide_code}", .trim = FALSE))
+
+  }
 
   if (display_type[1] == "both") {
     left <- code
