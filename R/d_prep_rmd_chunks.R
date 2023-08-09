@@ -11,7 +11,7 @@ return_partial_chunks_template_code_quarto <- function(){
 return_partial_chunks_template_code_lag_quarto <- function(){
 
 
-  "```{<<<lang>>> <<<chunk_name>>>_<<<break_type>>>_<<<breaks_prep>>>_code_lag, `code-line-numbers` = code_hl_ranges[<<<breaks>>>], eval = FALSE, echo = TRUE, code = code_seq_lag[[<<<breaks>>>]]}
+  "```{<<<lang>>> <<<chunk_name>>>_<<<break_type>>>_<<<breaks_prep>>>_code_lag, eval = FALSE, echo = TRUE, code = code_seq_lag[[<<<breaks>>>]]}
 ```"
 
 }
