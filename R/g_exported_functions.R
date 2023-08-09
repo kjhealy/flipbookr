@@ -114,8 +114,6 @@ chunk_reveal <- function(chunk_name = NULL,
 
   }
 
-  message(str(code_seq))
-
   if (is.null(func_seq) & !is.null(code_seq)){
 
     try(func_seq <- chunk_name_return_function_sequence(chunk_name, break_type, left_assign,
