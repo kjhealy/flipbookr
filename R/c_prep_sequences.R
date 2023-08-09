@@ -177,14 +177,23 @@ shown_lines_calc_highlight <- function(which_show = list(c(1, 2), c(1, 2, 3, 4))
 
 #### Return partial code builds for frames ######
 parsed_return_partial_code <- function(parsed,
+                                       platform = c("xaringan", "quarto"),
                                        which_show_frame = 1:3,
                                        which_highlight_frame = 3){
+
+  platform <- match.arg(platform)
+  if(platform == "quarto") {
+    hilite_line <-  ""
+  } else {
+    hilite_line <- "#<<"
+  }
+
 
   parsed %>%
     dplyr::filter(line %in% which_show_frame) %>%
     dplyr::mutate(connector = dplyr::case_when(1:dplyr::n() == dplyr::n() ~ "",
                                                1:dplyr::n() != dplyr::n() ~ connector)) %>%
-    dplyr::mutate(highlight = ifelse(line %in% which_highlight_frame, "#<<", "" )) %>%
+    dplyr::mutate(highlight = ifelse(line %in% which_highlight_frame, hilite_line, "" )) %>%
     dplyr::mutate(highlight = ifelse(code == "" | code == "\\s?", "", highlight)) %>%
     dplyr::mutate(out = paste0(code, "",
                                connector,
@@ -223,11 +232,20 @@ parsed_return_recent_function <- function(parsed,
 #' code_parse() %>%
 #' parsed_left_assign_return_partial_code()
 parsed_left_assign_return_partial_code <- function(parsed,
+                                                   platform = c("xaringan", "quarto"),
                                                    which_show_frame = 1:3,
                                                    which_highlight_frame = 3,
                                                    left_assign_add = "flextable::flextable()"){
+  platform <- match.arg(platform)
+  if(platform == "quarto") {
+    hilite_line <-  ""
+  } else {
+    hilite_line <- "#<<"
+  }
+
 
   the_reveal <- parsed_return_partial_code(parsed,
+                                           platform = platform,
                                            which_show_frame,
                                            which_highlight_frame)
 
@@ -282,6 +300,7 @@ first_raw
 
 
 parsed_return_partial_code_sequence <- function(parsed,
+                                                platform = c("xaringan", "quarto"),
                                                 break_type = "auto",
                                                 which_show = parsed_calc_show(parsed = parsed,
                                                                               break_type = break_type,
@@ -292,6 +311,8 @@ parsed_return_partial_code_sequence <- function(parsed,
                                                 left_assign = F,
                                                 left_assign_add = NULL
 ){
+
+  platform <- match.arg(platform)
 
   if(left_assign == "detect"){
 
@@ -307,6 +328,7 @@ parsed_return_partial_code_sequence <- function(parsed,
     if (left_assign == F) {
       partial_code_frames[[i]] <-
         parsed_return_partial_code(parsed,
+                                   platform = platform,
                                    which_show_frame = which_show[[i]],
                                    which_highlight_frame = which_highlight[[i]]) %>%
         stringr::str_trim(side = "right") # this is for python
@@ -367,6 +389,7 @@ parsed_return_recent_function_sequence <- function(parsed,
 #   code_replacements_and_highlight(replacements = 1:4, replace = "10")
 
 chunk_name_return_code_sequence <- function(chunk_name,
+                                            platform = c("xaringan", "quarto"),
                                             break_type = "auto",
                                             left_assign = F,
                                             left_assign_add = NULL,
@@ -379,11 +402,14 @@ chunk_name_return_code_sequence <- function(chunk_name,
                                             replacements3 = NULL,
                                             replace3 = NULL){
 
+  platform <- match.arg(platform)
+
   if (break_type == "replace"){
 
     chunk_name %>%
       chunk_code_get() %>%
       code_replacements_and_highlight(replace = replace,
+                                      platform = platform,
                                       replacements = replacements,
                                       replace2 = replace2, replacements2 = replacements2,
                                       replace3 = replace3, replacements3 = replacements3)
@@ -395,6 +421,7 @@ chunk_name_return_code_sequence <- function(chunk_name,
       chunk_code_get() %>%
       code_parse(lang = lang, omit = omit) %>%
       parsed_return_partial_code_sequence(break_type = break_type,
+                                          platform = platform,
                                           left_assign = left_assign,
                                           left_assign_add = left_assign_add)
 
@@ -408,7 +435,6 @@ chunk_name_return_function_sequence <- function(chunk_name,
                                                 left_assign_add = NULL,
                                                 lang = "r",
                                                 omit = "#OMIT"){
-
 
   chunk_name %>%
     chunk_code_get() %>%
@@ -425,9 +451,17 @@ chunk_name_return_function_sequence <- function(chunk_name,
 #   code_replacements_and_highlight(replacements = 1:8/8, replace = "\\.3")
 
 code_replacements_and_highlight <- function(code,
+                                            platform = c("xaringan", "quarto"),
                                             replacements = 1:3, replace = NULL,
                                             replacements2 = 4:6, replace2 = NULL,
                                             replacements3 = 7:9, replace3 = NULL){
+
+  platform <- match.arg(platform)
+  if(platform == "quarto") {
+    hilite_line <-  ""
+  } else {
+    hilite_line <- "#<<"
+  }
 
   replacements <- as.character(replacements)
   replacements2 <- as.character(replacements2)
@@ -440,21 +474,21 @@ code_replacements_and_highlight <- function(code,
     code_seq[[i]] <- code %>%
       code_as_table() %>%
       dplyr::mutate(code = ifelse(stringr::str_detect(raw_code, replace),
-                                  paste(raw_code, "#<<"),
+                                  paste(raw_code, hilite_line),
                                   raw_code)) %>%
       dplyr::mutate(code =
                       stringr::str_replace_all(code,
                                                replace,
                                                replacements[i])) %>%
       dplyr::mutate(code = ifelse(stringr::str_detect(code, replace2),
-                                  paste(code, ifelse(replace == replace2, "", "#<<")),
+                                  paste(code, ifelse(replace == replace2, "", hilite_line)),
                                   code)) %>%
       dplyr::mutate(code =
                       stringr::str_replace_all(code,
                                                replace2,
                                                replacements2[i])) %>%
       dplyr::mutate(code = ifelse(stringr::str_detect(code, replace3),
-                                  paste(code, ifelse(replace == replace3, "", "#<<")),
+                                  paste(code, ifelse(replace == replace3, "", hilite_line)),
                                   code)) %>%
       dplyr::mutate(code =
                       stringr::str_replace_all(code,

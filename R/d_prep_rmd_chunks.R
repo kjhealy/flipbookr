@@ -1,6 +1,22 @@
 
 
 #### Template code chunks to deliver partial builds on ####
+return_partial_chunks_template_code_quarto <- function(){
+
+  "```{<<<lang>>> <<<chunk_name>>>_<<<break_type>>>_<<<breaks_prep>>>_code, `code-line-numbers` = code_hl_ranges[<<<breaks>>>], eval = FALSE, echo = TRUE, code = code_seq[[<<<breaks>>>]]}
+```"
+
+}
+
+return_partial_chunks_template_code_lag_quarto <- function(){
+
+
+  "```{<<<lang>>> <<<chunk_name>>>_<<<break_type>>>_<<<breaks_prep>>>_code_lag, `code-line-numbers` = code_hl_ranges[<<<breaks>>>], eval = FALSE, echo = TRUE, code = code_seq_lag[[<<<breaks>>>]]}
+```"
+
+}
+
+
 return_partial_chunks_template_code <- function(){
 
   "```{<<<lang>>> <<<chunk_name>>>_<<<break_type>>>_<<<breaks_prep>>>_code, eval = FALSE, echo = TRUE, code = code_seq[[<<<breaks>>>]]}
@@ -15,6 +31,7 @@ return_partial_chunks_template_code_lag <- function(){
 ```"
 
 }
+
 
 
 return_partial_chunks_template_output <- function(){

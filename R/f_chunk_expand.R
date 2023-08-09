@@ -11,6 +11,7 @@ chunk_expand <- function(platform = c("xaringan", "quarto"),
                          lcolw = "60",
                          rcolw = "40",
                          smallcode = FALSE,
+                         code_hl_ranges = NULL,
                          chunk_name = "example",
                          break_type = "auto",
                          display_type = c("code", "output"),
@@ -30,10 +31,22 @@ chunk_expand <- function(platform = c("xaringan", "quarto"),
 
   platform <- match.arg(platform)
 
+  code_hl_ranges <- code_hl_ranges
   breaks <- 1:num_breaks
   breaks_prep <- stringr::str_pad(breaks, width = 2, pad = "0")
-  code <- return_partial_chunks_template_code()
-  code_lag <- return_partial_chunks_template_code_lag()
+
+  if(platform == "quarto") {
+
+    code <- return_partial_chunks_template_code_quarto()
+    code_lag <- return_partial_chunks_template_code_lag_quarto()
+
+  } else {
+
+    code <- return_partial_chunks_template_code()
+    code_lag <- return_partial_chunks_template_code_lag()
+
+  }
+
   output <- return_partial_chunks_template_output()
   output_lag <- return_partial_chunks_template_output_lag()
   output_lag2 <- return_partial_chunks_template_output_lag2()
@@ -69,6 +82,7 @@ chunk_expand <- function(platform = c("xaringan", "quarto"),
     )
 
     slide_code <- glue::glue_collapse(partial_knit_steps, sep = "\n\n")
+    readr::write_file(slide_code, here::here("slide_code.txt"))
     return(glue::glue("{slide_code}", .trim = FALSE))
 
   }

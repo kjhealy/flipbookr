@@ -52,6 +52,7 @@ chunk_reveal <- function(chunk_name = NULL,
                          lcolw = "40",
                          rcolw = "60",
                          smallcode = FALSE,
+                         code_hl_ranges = NULL,
                          break_type = "auto",
                          left_assign = F,
                          left_assign_add = NULL,
@@ -86,6 +87,7 @@ chunk_reveal <- function(chunk_name = NULL,
 
   platform <- match.arg(platform)
   smallcode <- smallcode
+  code_hl_ranges <- code_hl_ranges
 
   correct_py(lang = lang)
 
@@ -100,6 +102,7 @@ chunk_reveal <- function(chunk_name = NULL,
   if (!is.null(chunk_name) & is.null(code_seq)) {
 
     code_seq <- chunk_name_return_code_sequence(chunk_name = chunk_name,
+                                                platform = platform,
                                                 break_type = break_type,
                                                 left_assign = left_assign,
                                                 left_assign_add = left_assign_add,
@@ -110,6 +113,8 @@ chunk_reveal <- function(chunk_name = NULL,
                                                 replace3 = replace3, replacements3 = replacements3)
 
   }
+
+  message(str(code_seq))
 
   if (is.null(func_seq) & !is.null(code_seq)){
 
@@ -134,6 +139,18 @@ chunk_reveal <- function(chunk_name = NULL,
 
     num_breaks <- length(code_seq)
 
+    get_hl_span <- function(code_seq) {
+      n_breaks <- length(code_seq)
+      ind <- 1:n_breaks
+      lines_within <- sapply(code_seq, length)
+      chk_diff <- ind != lines_within
+      ind[chk_diff] <- paste(ind, lines_within, sep = "-")[chk_diff]
+      ind
+    }
+
+    ## FIXME to inherit from chunk_reveal(code_hl_ranges = xxx) if present
+    code_hl_ranges <- get_hl_span(code_seq)
+
   }
 
   if (is.null(num_breaks)){ # in case you have no code sequence
@@ -148,6 +165,7 @@ chunk_reveal <- function(chunk_name = NULL,
                        platform = platform,
                        lcolw = lcolw,
                        rcolw = rcolw,
+                       code_hl_ranges = code_hl_ranges,
                        smallcode = smallcode,
                        break_type = break_type,
                        num_breaks = num_breaks,
