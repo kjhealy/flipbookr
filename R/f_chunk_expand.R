@@ -82,7 +82,7 @@ chunk_expand <- function(platform = c("xaringan", "quarto"),
     )
 
     slide_code <- glue::glue_collapse(partial_knit_steps, sep = "\n\n")
-    readr::write_file(slide_code, here::here("slide_code.txt"))
+#    readr::write_file(slide_code, here::here("slide_code.txt"))
     return(glue::glue("{slide_code}", .trim = FALSE))
 
   }
