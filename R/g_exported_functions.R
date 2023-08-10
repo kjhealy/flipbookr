@@ -16,6 +16,7 @@ knit_text_and_collapse <- function(text){
 #' @param platform a character string indicating the slide system. Either "xarignan" or "quarto". Defaults to "xaringan".
 #' @param lcolw a character string indicating the width of the left-side column. Quarto only. Defaults to "60". Converted to percent.
 #' @param rcolw a character string indicating the width of the right-side column. Quarto only. Defaults to "40". Converted to percent.
+#' @param smallcode Logical vector that tags code output with a `.smallcode` class. Your theme or custom CSS file will need to define this, otherwise it will have no effect
 #' @param break_type "auto" is default finding appropriate breakpoints, "user" can be used with the special comment message #BREAK within the source code chunk, "non_seq" can be used for non sequential display of code with special comment messages #BREAK2 (will show in second frame) and #BREAK3 (will show in third frame), an integer input can be given too, to simply display the source code chunk multiple times which is appropriate for observing multiple realizations of sampling, "rotate" allows cycling through different lines of code, the comment #ROTATE is used for lines to by cycled through
 #' @param left_assign a logical, default is FALSE, if TRUE will print the object created in the upper left hand corner of the source code chunk at the end of each partial reveal
 #' @param left_assign_add a character string containing function for table formatting in output, for left assign case only

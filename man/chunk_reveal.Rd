@@ -11,6 +11,8 @@ chunk_reveal(
   platform = c("xaringan", "quarto"),
   lcolw = "40",
   rcolw = "60",
+  smallcode = FALSE,
+  code_hl_ranges = NULL,
   break_type = "auto",
   left_assign = F,
   left_assign_add = NULL,
@@ -48,6 +50,8 @@ chunk_reveal(
 \item{lcolw}{a character string indicating the width of the left-side column. Quarto only. Defaults to "60". Converted to percent.}
 
 \item{rcolw}{a character string indicating the width of the right-side column. Quarto only. Defaults to "40". Converted to percent.}
+
+\item{smallcode}{Logical vector that tags code output with a `.smallcode` class. Your theme or custom CSS file will need to define this, otherwise it will have no effect}
 
 \item{break_type}{"auto" is default finding appropriate breakpoints, "user" can be used with the special comment message #BREAK within the source code chunk, "non_seq" can be used for non sequential display of code with special comment messages #BREAK2 (will show in second frame) and #BREAK3 (will show in third frame), an integer input can be given too, to simply display the source code chunk multiple times which is appropriate for observing multiple realizations of sampling, "rotate" allows cycling through different lines of code, the comment #ROTATE is used for lines to by cycled through}
 

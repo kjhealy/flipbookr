@@ -6,6 +6,7 @@
 \usage{
 parsed_left_assign_return_partial_code(
   parsed,
+  platform = c("xaringan", "quarto"),
   which_show_frame = 1:3,
   which_highlight_frame = 3,
   left_assign_add = "flextable::flextable()"
