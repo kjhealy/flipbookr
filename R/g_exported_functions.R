@@ -192,8 +192,17 @@ chunk_reveal <- function(chunk_name = NULL,
 
 
 
-chunq_reveal <- function(...) chunk_reveal(..., platform = "quarto")
-
+#' Quarto default for chunk_reveal
+#' Convenience function; see @chunk_reveal for arguments
+#'
+#' @param ... Pass arguments through to @chunk_reveal
+#'
+#' @return a string object is returned will only work in 'quarto' context
+#' @export
+#'
+chunq_reveal <- function(...) {
+  chunk_reveal(..., platform = "quarto")
+}
 
 ## returning code sequence as a vector
 # create_injectable_code() %>%

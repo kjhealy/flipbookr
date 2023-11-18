@@ -2,6 +2,7 @@
 
 export("%>%")
 export(chunk_reveal)
+export(chunq_reveal)
 export(create_base_pipe_code)
 export(embed_flipbook)
 export(text_reveal)
