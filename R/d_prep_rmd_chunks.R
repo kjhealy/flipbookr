@@ -3,7 +3,7 @@
 #### Template code chunks to deliver partial builds on ####
 return_partial_chunks_template_code_quarto <- function(){
 
-  "```{<<<lang>>> <<<chunk_name>>>_<<<break_type>>>_<<<breaks_prep>>>_code, `code-line-numbers` = code_hl_ranges[<<<breaks>>>], eval = FALSE, echo = TRUE, code = code_seq[[<<<breaks>>>]]}
+  "```{<<<lang>>> <<<chunk_name>>>_<<<break_type>>>_<<<breaks_prep>>>_code, eval = FALSE, echo = TRUE, code = code_seq[[<<<breaks>>>]]}
 ```"
 
 }
